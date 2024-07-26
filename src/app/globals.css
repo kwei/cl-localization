@@ -22,3 +22,26 @@ body {
         text-wrap: balance;
     }
 }
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin: 8px 0;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: gray;
+}
+
+*::-webkit-scrollbar-track-piece {
+    display: none;
+}
