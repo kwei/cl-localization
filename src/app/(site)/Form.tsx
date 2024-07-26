@@ -44,7 +44,10 @@ export const Form = ({ children }: { children: ReactNode }) => {
       const prefix = formData.get('prefix') as string;
       const newKeys: string[] = [];
       for (let i = 0; i < rows.length - 1; i++) {
-        newKeys.push((prefix.trim() + formData.get(`new-key-${i}`)) as string);
+        newKeys.push(
+          ((prefix !== '' ? prefix.trim() + '.' : '') +
+            formData.get(`new-key-${i}`)) as string,
+        );
       }
       const result: Record<string, Record<string, string>> = {
         [Locale.Default]: {},
