@@ -38,14 +38,10 @@ export const useFileUpload = () => {
   }, [handleDragLeave, handleDragOver, handleInputFile]);
 
   const handleOnChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    console.log("on change event");
     event.preventDefault();
     const inputs = event.target;
-    console.log("on change: ", inputs.files);
     if (!inputs.files || inputs.files.length === 0) return;
-    console.log("check type: ", inputs.files[0].type);
     if (ACCEPTED_FILE_TYPE.includes(inputs.files[0].type)) {
-      console.log("set: ", inputs.files[0]);
       setFile(inputs.files[0]);
     }
   }, []);

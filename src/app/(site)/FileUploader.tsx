@@ -1,7 +1,7 @@
 'use client';
 
 import { useFileCtx } from '@/app/(site)/FileContext';
-import { SearchIcon } from '@/app/(site)/SearchIcon';
+import { SearchIcon } from '@/app/components/SearchIcon';
 import { ACCEPTED_FILE_TYPE, useFileUpload } from '@/hooks/useFileUpload';
 import { useCallback, useEffect, useRef } from 'react';
 
@@ -36,7 +36,7 @@ export const FileUploader = () => {
     if (file) {
       setFile(file);
     }
-  }, [file]);
+  }, [file, setFile]);
 
   return (
     <div className="col-span-5 flex flex-col gap-4">

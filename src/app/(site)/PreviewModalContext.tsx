@@ -1,7 +1,15 @@
 'use client';
 
-import { CopyIcon } from '@/app/(site)/CopyIcon';
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { CheckIcon } from '@/app/components/CheckIcon';
+import { CopyIcon } from '@/app/components/CopyIcon';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 
 interface ContextValue {
   open: (flag: boolean) => void;
@@ -50,22 +58,7 @@ const PreviewModal = ({
         </h3>
         <div className="flex w-full flex-1 flex-col gap-4 overflow-y-auto p-4">
           {Object.keys(data).map((key) => (
-            <fieldset
-              key={key}
-              className="group relative w-full rounded-md border border-solid border-gray-500 px-4 pb-2"
-            >
-              <legend className="px-2 font-semibold">{key}</legend>
-              <pre className="w-full max-w-[400px] overflow-x-auto text-gray-500">
-                {JSON.stringify(data[key], undefined, 2)}
-              </pre>
-              <button
-                type="button"
-                title="copy"
-                className="invisible absolute -top-2 right-1 flex size-7 items-center justify-center rounded-full p-2 transition-all hover:bg-gray-500/30 group-hover:visible"
-              >
-                <CopyIcon />
-              </button>
-            </fieldset>
+            <LocalResultBlock key={key} local={key} value={data[key]} />
           ))}
         </div>
         <div className="flex w-full flex-row-reverse items-center">
@@ -79,5 +72,45 @@ const PreviewModal = ({
         </div>
       </div>
     </div>
+  );
+};
+
+const LocalResultBlock = ({
+  local,
+  value,
+}: {
+  local: string;
+  value: Record<string, string>;
+}) => {
+  const jsonValue = useMemo(() => JSON.stringify(value, undefined, 2), [value]);
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(jsonValue).then();
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  }, [jsonValue]);
+
+  return (
+    <fieldset
+      key={local}
+      className="group relative w-full rounded-md border border-solid border-gray-500 px-4 pb-2"
+    >
+      <legend className="px-2 font-semibold">{local}</legend>
+      <pre className="w-full max-w-[380px] overflow-x-auto text-gray-500">
+        {jsonValue}
+      </pre>
+      <button
+        type="button"
+        title="copy"
+        onClick={handleCopy}
+        disabled={copied}
+        className="invisible absolute -top-2 right-1 flex size-7 items-center justify-center rounded-full p-2 transition-all hover:bg-gray-500/30 group-hover:visible"
+      >
+        {copied ? <CheckIcon /> : <CopyIcon />}
+      </button>
+    </fieldset>
   );
 };

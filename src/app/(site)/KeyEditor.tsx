@@ -1,6 +1,6 @@
 'use client';
 
-import { CloseIcon } from '@/app/(site)/CloseIcon';
+import { CloseIcon } from '@/app/components/CloseIcon';
 import { useFileCtx } from '@/app/(site)/FileContext';
 import { useMemo, useRef } from 'react';
 
