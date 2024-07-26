@@ -9,7 +9,7 @@ export const FileUploader = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const sheetRef = useRef<HTMLInputElement>(null);
   const { setFile, setSheetName } = useFileCtx();
-  const { file, getDropProperties, handleOnChange } = useFileUpload();
+  const { file, getDropProperties, handleOnChange, clear } = useFileUpload();
 
   const handleClick = useCallback(() => {
     inputRef.current?.click();
@@ -19,7 +19,18 @@ export const FileUploader = () => {
     const sheetName = sheetRef.current?.value;
     if (!sheetName || sheetName.trim() === '') return;
     setSheetName(sheetName);
-  }, []);
+  }, [setSheetName]);
+
+  const handleClear = useCallback(() => {
+    clear();
+    setFile(null);
+    setSheetName('');
+    if (!inputRef.current) return;
+    inputRef.current.files = null;
+    inputRef.current.value = '';
+    if (!sheetRef.current) return;
+    sheetRef.current.value = '';
+  }, [clear, setFile, setSheetName]);
 
   useEffect(() => {
     if (file) {
@@ -45,13 +56,13 @@ export const FileUploader = () => {
         <button
           type="button"
           onClick={handleSearchFile}
-          className="flex h-full items-center justify-center rounded-r-md border border-solid border-gray-500 bg-green-400/70 px-3 leading-6 transition-colors hover:bg-green-400"
+          className="flex h-full items-center justify-center rounded-r-md border border-solid border-gray-500 bg-green-400/70 px-3 leading-6 transition-colors hover:bg-green-400/50"
         >
           <SearchIcon />
         </button>
       </div>
       <div
-        className="relative flex h-[300px] p-4 w-full cursor-pointer items-center justify-center rounded-md border-4 border-dashed border-gray-500 transition-colors hover:border-gray-500/70"
+        className="relative flex h-[300px] w-full cursor-pointer items-center justify-center rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70"
         {...getDropProperties()}
         onClick={handleClick}
       >
@@ -74,6 +85,16 @@ export const FileUploader = () => {
           accept={ACCEPTED_FILE_TYPE.toString()}
           hidden
         />
+      </div>
+      <div className="w-full py-4">
+        <button
+          type="button"
+          onClick={handleClear}
+          disabled={!file}
+          className="w-full cursor-pointer rounded-md bg-red-500/50 px-4 py-2 text-center text-lg transition-colors hover:bg-red-500/30"
+        >
+          Clear
+        </button>
       </div>
     </div>
   );

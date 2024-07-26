@@ -29,6 +29,8 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
       readXlsxFile(file, { sheet: sheetName }).then((data) => {
         setRows(data);
       });
+    } else {
+      setRows([]);
     }
   }, [file, sheetName]);
 
@@ -37,11 +39,11 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
 
 const Ctx = createContext<{
   rows: Row[];
-  setFile: (file: File | Blob) => void;
+  setFile: (file: File | Blob | null) => void;
   setSheetName: (name: string) => void;
 }>({
   rows: [],
-  setFile: (file: File | Blob) => {},
+  setFile: (file: File | Blob | null) => {},
   setSheetName: (name: string) => {},
 });
 

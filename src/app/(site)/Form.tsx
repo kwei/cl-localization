@@ -23,7 +23,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
         [Locale.ESP]: 0,
       };
     }
-    const row = rows[0].map((data) => data.toString());
+    const row = rows[0].map((data) => data?.toString());
     return {
       [Locale.Default]: 0,
       [Locale.FRA]: row.indexOf(Locale.FRA),
@@ -44,7 +44,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
       const prefix = formData.get('prefix') as string;
       const newKeys: string[] = [];
       for (let i = 0; i < rows.length - 1; i++) {
-        newKeys.push(formData.get(`new-key-${i}`) as string);
+        newKeys.push((prefix.trim() + formData.get(`new-key-${i}`)) as string);
       }
       const result: Record<string, Record<string, string>> = {
         [Locale.Default]: {},
@@ -66,7 +66,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
       setData(result);
       open(true);
     },
-    [rows, localeIndex],
+    [setData, open, rows, localeIndex],
   );
 
   return (
