@@ -14,14 +14,17 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
   const [file, setFile] = useState<File | Blob | null>(null);
   const [rows, setRows] = useState<Row[]>([]);
   const [sheetName, setSheetName] = useState<string>();
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
   const ctxVal = useMemo(
     () => ({
       rows,
+      selectedRows,
       setFile,
       setSheetName,
+      setSelectedRows,
     }),
-    [rows],
+    [rows, selectedRows],
   );
 
   useEffect(() => {
@@ -31,6 +34,7 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
       });
     } else {
       setRows([]);
+      setSelectedRows([]);
     }
   }, [file, sheetName]);
 
@@ -39,12 +43,16 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
 
 const Ctx = createContext<{
   rows: Row[];
+  selectedRows: number[];
   setFile: (file: File | Blob | null) => void;
   setSheetName: (name: string) => void;
+  setSelectedRows: (rows: number[]) => void;
 }>({
   rows: [],
-  setFile: (file: File | Blob | null) => {},
-  setSheetName: (name: string) => {},
+  selectedRows: [],
+  setFile: (_file: File | Blob | null) => {},
+  setSheetName: (_name: string) => {},
+  setSelectedRows: (_rows: number[]) => {},
 });
 
 export const useFileCtx = () => useContext(Ctx);

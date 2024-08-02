@@ -1,7 +1,7 @@
 'use client';
 
 import { useFileCtx } from '@/app/(site)/FileContext';
-import { usePreviewModal } from '@/app/(site)/PreviewModalContext';
+import { usePreviewModal } from '@/app/Context/PreviewModalContext';
 import { Locale } from '@/constants';
 import { FormEvent, ReactNode, useCallback, useMemo } from 'react';
 
@@ -63,7 +63,8 @@ export const Form = ({ children }: { children: ReactNode }) => {
       newKeys.forEach((key, i) => {
         Object.keys(localeIndex).forEach((locale) => {
           const index = localeIndex[locale];
-          result[locale][key] = rows[i + 1][index].toString();
+          const cell = rows[i + 1][index];
+          result[locale][key] = cell ? cell.toString() : '';
         });
       });
       setData(result);
@@ -79,5 +80,21 @@ export const Form = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </form>
+  );
+};
+
+export const ActionBar = () => {
+  const { rows } = useFileCtx();
+
+  return (
+    <div className="flex w-full flex-row-reverse items-center">
+      <button
+        type="submit"
+        className="cursor-pointer rounded-md bg-blue-500/70 px-4 py-2 transition-colors hover:bg-blue-500/50"
+        disabled={rows.length === 0}
+      >
+        Preview
+      </button>
+    </div>
   );
 };

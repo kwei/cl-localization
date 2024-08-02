@@ -2,14 +2,16 @@
 
 import { useFileCtx } from '@/app/(site)/FileContext';
 import { SearchIcon } from '@/app/components/SearchIcon';
-import { ACCEPTED_FILE_TYPE, useFileUpload } from '@/hooks/useFileUpload';
+import { useFileUpload } from '@/hooks/useFileUpload';
 import { useCallback, useEffect, useRef } from 'react';
+
+const ACCEPTED_FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 export const FileUploader = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const sheetRef = useRef<HTMLInputElement>(null);
   const { setFile, setSheetName } = useFileCtx();
-  const { file, getDropProperties, handleOnChange, clear } = useFileUpload();
+  const { file, getDropProperties, handleOnChange, clear } = useFileUpload(ACCEPTED_FILE_TYPE);
 
   const handleClick = useCallback(() => {
     inputRef.current?.click();
@@ -40,7 +42,7 @@ export const FileUploader = () => {
 
   return (
     <div className="col-span-5 flex flex-col gap-4">
-      <h3 className="w-full py-4 text-center text-xl font-bold">
+      <h3 className="w-full py-2 text-center text-xl font-bold">
         Choose Excel File
       </h3>
       <div className="flex w-full items-center">
@@ -50,7 +52,7 @@ export const FileUploader = () => {
             type="text"
             name="sheetName"
             className="w-full bg-transparent px-2 focus:outline-0"
-            placeholder="sheetName"
+            placeholder="tabName"
           />
         </fieldset>
         <button
@@ -82,7 +84,7 @@ export const FileUploader = () => {
           type="file"
           name="file"
           onChange={handleOnChange}
-          accept={ACCEPTED_FILE_TYPE.toString()}
+          accept={ACCEPTED_FILE_TYPE}
           hidden
         />
       </div>

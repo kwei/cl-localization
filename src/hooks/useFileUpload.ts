@@ -1,11 +1,7 @@
 'use client';
 import { ChangeEvent, DragEvent, useCallback, useState } from 'react';
 
-export const ACCEPTED_FILE_TYPE = [
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-];
-
-export const useFileUpload = () => {
+export const useFileUpload = (acceptedFileType: string) => {
   const [file, setFile] = useState<File | null>(null);
 
   const clear = () => setFile(null);
@@ -14,10 +10,10 @@ export const useFileUpload = () => {
     event.preventDefault();
     const inputs = event.dataTransfer;
     if (!inputs.files || inputs.files.length === 0) return;
-    if (ACCEPTED_FILE_TYPE.includes(inputs.files[0].type)) {
+    if (acceptedFileType === inputs.files[0].type) {
       setFile(inputs.files[0]);
     }
-  }, []);
+  }, [acceptedFileType]);
 
   const handleDragOver = useCallback((event: DragEvent) => {
     event.preventDefault();
@@ -41,10 +37,10 @@ export const useFileUpload = () => {
     event.preventDefault();
     const inputs = event.target;
     if (!inputs.files || inputs.files.length === 0) return;
-    if (ACCEPTED_FILE_TYPE.includes(inputs.files[0].type)) {
+    if (acceptedFileType === inputs.files[0].type) {
       setFile(inputs.files[0]);
     }
-  }, []);
+  }, [acceptedFileType]);
 
   return { file, getDropProperties, handleOnChange, clear };
 };
