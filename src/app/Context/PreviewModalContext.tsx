@@ -17,8 +17,8 @@ interface ContextValue {
 }
 
 const initCtxVal = {
-  open: (flag: boolean) => {},
-  setData: (data: Record<string, Record<string, string>>) => {},
+  open: (_flag: boolean) => {},
+  setData: (_data: Record<string, Record<string, string>>) => {},
 };
 
 export const PreviewModalContext = ({ children }: { children: ReactNode }) => {
