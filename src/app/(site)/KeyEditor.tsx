@@ -8,10 +8,17 @@ export const KeyEditor = () => {
   const { rows, selectedRows } = useFileCtx();
   const prefixRef = useRef<HTMLInputElement>(null);
 
-  const originalKey = useMemo(
-    () => rows.filter((_, i) => selectedRows.includes(i)).map((row) => row[0]),
-    [rows, selectedRows],
-  );
+  const originalKey = useMemo(() => {
+    if (rows.length === 0) return [];
+    const filteredRows = rows.filter((_, i) => selectedRows.includes(i));
+    let keyIndex = 0;
+    rows[0].forEach((cell, i) => {
+      if (cell?.toString() === 'ENU' || cell?.toString() === 'ENG') {
+        keyIndex = i;
+      }
+    });
+    return filteredRows.map((row) => row[keyIndex]);
+  }, [rows, selectedRows]);
 
   return (
     <div className="col-span-7 flex flex-col gap-4">

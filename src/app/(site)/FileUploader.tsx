@@ -1,27 +1,34 @@
 'use client';
 
 import { useFileCtx } from '@/app/(site)/FileContext';
+import { Dropdown, DropdownOption } from '@/app/components/Dropdown';
 import { SearchIcon } from '@/app/components/SearchIcon';
 import { useFileUpload } from '@/hooks/useFileUpload';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-const ACCEPTED_FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const ACCEPTED_FILE_TYPE =
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 export const FileUploader = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const sheetRef = useRef<HTMLInputElement>(null);
-  const { setFile, setSheetName } = useFileCtx();
-  const { file, getDropProperties, handleOnChange, clear } = useFileUpload(ACCEPTED_FILE_TYPE);
+  const [tabName, setTabName] = useState<string>();
+  const { sheetNames, setFile, setSheetName, setOpenSelector } = useFileCtx();
+  const { file, getDropProperties, handleOnChange, clear } =
+    useFileUpload(ACCEPTED_FILE_TYPE);
 
   const handleClick = useCallback(() => {
     inputRef.current?.click();
   }, []);
 
+  const handleOnChangeTab = (name: string) => {
+    setTabName(name);
+  };
+
   const handleSearchFile = useCallback(() => {
-    const sheetName = sheetRef.current?.value;
-    if (!sheetName || sheetName.trim() === '') return;
-    setSheetName(sheetName);
-  }, [setSheetName]);
+    if (!tabName || tabName.trim() === '') return;
+    setSheetName(tabName);
+    setOpenSelector(true);
+  }, [setOpenSelector, setSheetName, tabName]);
 
   const handleClear = useCallback(() => {
     clear();
@@ -30,8 +37,6 @@ export const FileUploader = () => {
     if (!inputRef.current) return;
     inputRef.current.files = null;
     inputRef.current.value = '';
-    if (!sheetRef.current) return;
-    sheetRef.current.value = '';
   }, [clear, setFile, setSheetName]);
 
   useEffect(() => {
@@ -46,15 +51,30 @@ export const FileUploader = () => {
         Choose Excel File
       </h3>
       <div className="flex w-full items-center">
-        <fieldset className="flex flex-1 items-center rounded-md rounded-r-none border border-r-0 border-solid border-gray-500 py-2 pl-2 transition-colors hover:border-gray-500/70">
-          <input
-            ref={sheetRef}
-            type="text"
-            name="sheetName"
-            className="w-full bg-transparent px-2 focus:outline-0"
-            placeholder="tabName"
-          />
-        </fieldset>
+        <Dropdown
+          value={tabName}
+          placeholder="Choose Tab"
+          className="min-w-[300px] rounded-l-md border border-r-0 border-solid border-gray-500 bg-gray-300 px-4 py-2 transition-colors hover:bg-gray-300/50"
+          onChange={handleOnChangeTab}
+        >
+          <div className="flex max-h-[350px] flex-col overflow-y-auto rounded-md border border-solid border-gray-500 bg-gray-300 p-2 gap-1">
+            {sheetNames.map((tab) => (
+              <DropdownOption
+                key={tab}
+                value={tab}
+                label={tab}
+                className={`${tabName === tab ? 'bg-white/70' : ''} rounded-sm px-4 py-1 text-left transition-colors hover:bg-white/50`}
+              />
+            ))}
+          </div>
+        </Dropdown>
+        <input
+          type="text"
+          name="sheetName"
+          className="hidden"
+          value={tabName}
+          readOnly
+        />
         <button
           type="button"
           onClick={handleSearchFile}

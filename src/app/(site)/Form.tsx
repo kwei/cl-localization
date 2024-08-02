@@ -6,7 +6,7 @@ import { Locale } from '@/constants';
 import { FormEvent, ReactNode, useCallback, useMemo } from 'react';
 
 export const Form = ({ children }: { children: ReactNode }) => {
-  const { rows } = useFileCtx();
+  const { rows, selectedRows } = useFileCtx();
   const { setData, open } = usePreviewModal();
 
   const localeIndex: Record<string, number> = useMemo(() => {
@@ -24,8 +24,14 @@ export const Form = ({ children }: { children: ReactNode }) => {
       };
     }
     const row = rows[0].map((data) => data?.toString());
+    let keyIndex = 0;
+    rows[0].forEach((cell, i) => {
+      if (cell?.toString() === 'ENU' || cell?.toString() === 'ENG') {
+        keyIndex = i;
+      }
+    });
     return {
-      [Locale.Default]: 0,
+      [Locale.Default]: keyIndex,
       [Locale.FRA]: row.indexOf(Locale.FRA),
       [Locale.JPN]: row.indexOf(Locale.JPN),
       [Locale.DEU]: row.indexOf(Locale.DEU),
@@ -43,12 +49,12 @@ export const Form = ({ children }: { children: ReactNode }) => {
       const formData = new FormData(event.target as HTMLFormElement);
       const prefix = formData.get('prefix') as string;
       const newKeys: string[] = [];
-      for (let i = 0; i < rows.length - 1; i++) {
+      selectedRows.forEach((_, i) => {
         newKeys.push(
           ((prefix !== '' ? prefix.trim() + '.' : '') +
             formData.get(`new-key-${i}`)) as string,
         );
-      }
+      });
       const result: Record<string, Record<string, string>> = {
         [Locale.Default]: {},
         [Locale.FRA]: {},
@@ -63,14 +69,14 @@ export const Form = ({ children }: { children: ReactNode }) => {
       newKeys.forEach((key, i) => {
         Object.keys(localeIndex).forEach((locale) => {
           const index = localeIndex[locale];
-          const cell = rows[i + 1][index];
+          const cell = rows[selectedRows[i]][index];
           result[locale][key] = cell ? cell.toString() : '';
         });
       });
       setData(result);
       open(true);
     },
-    [setData, open, rows, localeIndex],
+    [selectedRows, setData, open, localeIndex, rows],
   );
 
   return (

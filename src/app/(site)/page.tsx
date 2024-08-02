@@ -7,7 +7,7 @@ import { PreviewModalContext } from '@/app/Context/PreviewModalContext';
 
 export default function Home() {
   return (
-    <main className="flex w-full flex-1 items-center justify-center pb-8">
+    <main className="flex w-full flex-1 items-center justify-center pb-8 px-6">
       <div className="h-full w-full max-w-[1280px]">
         <PreviewModalContext>
           <FileContext>

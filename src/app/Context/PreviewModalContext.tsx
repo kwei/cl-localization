@@ -52,7 +52,7 @@ const PreviewModal = ({
   const { open } = usePreviewModal();
   return (
     <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/50">
-      <div className="flex h-[700px] w-[500px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg">
+      <div className="flex h-[700px] w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg">
         <h3 className="w-full text-center text-xl font-bold">
           Preview Localization Result
         </h3>
@@ -99,7 +99,7 @@ const LocalResultBlock = ({
       className="group relative w-full rounded-md border border-solid border-gray-500 px-4 pb-2"
     >
       <legend className="px-2 font-semibold">{local}</legend>
-      <pre className="w-full max-w-[380px] overflow-x-auto text-gray-500">
+      <pre className="w-full max-w-[580px] overflow-x-auto text-gray-500">
         {jsonValue}
       </pre>
       <button
