@@ -2,6 +2,7 @@
 
 import { CheckIcon } from '@/app/components/CheckIcon';
 import { CopyIcon } from '@/app/components/CopyIcon';
+import { useFocusRef } from '@/hooks/useFocusRef';
 import {
   createContext,
   ReactNode,
@@ -50,9 +51,15 @@ const PreviewModal = ({
   data: Record<string, Record<string, string>>;
 }) => {
   const { open } = usePreviewModal();
+  const ref = useFocusRef<HTMLDivElement>(() => {
+    open(false);
+  });
   return (
     <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/50">
-      <div className="flex h-[700px] w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg">
+      <div
+        ref={ref}
+        className="flex h-[700px] w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg"
+      >
         <h3 className="w-full text-center text-xl font-bold">
           Preview Localization Result
         </h3>

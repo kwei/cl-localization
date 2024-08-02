@@ -1,6 +1,7 @@
 'use client';
 
 import { useFileCtx } from '@/app/(site)/FileContext';
+import { useFocusRef } from '@/hooks/useFocusRef';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Row } from 'read-excel-file';
 
@@ -40,6 +41,10 @@ const Modal = ({
   rows: Row[];
   onConfirm: (rows: number[]) => void;
 }) => {
+  const { setOpenSelector } = useFileCtx();
+  const ref = useFocusRef<HTMLDivElement>(() => {
+    setOpenSelector(false);
+  });
   const handleOnConfirm = useCallback(() => {
     const selectedRows: number[] = [];
     for (let i = 0; i < rows.length; i++) {
@@ -51,7 +56,10 @@ const Modal = ({
 
   return (
     <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/50">
-      <div className="flex h-[700px] w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg">
+      <div
+        ref={ref}
+        className="flex h-[700px] w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg"
+      >
         <h3 className="w-full text-center text-xl font-bold">
           Select Data Rows
         </h3>
@@ -99,14 +107,16 @@ const PreviewExcel = ({ rows }: { rows: Row[] }) => {
           Select All
         </button>
       </div>
-      {rows.map((row, i) => (
-        <RowData
-          row={row}
-          index={i}
-          selected={selectAll}
-          key={`row-${i.toString()}`}
-        />
-      ))}
+      <div className="h-full w-full overflow-y-auto pb-4">
+        {rows.map((row, i) => (
+          <RowData
+            row={row}
+            index={i}
+            selected={selectAll}
+            key={`row-${i.toString()}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
