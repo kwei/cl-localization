@@ -6,7 +6,7 @@ export const Header = () => {
   return (
     <div className="flex w-full flex-col">
       <div className="bg-gradient-main w-full pt-1"></div>
-      <nav className="flex w-full items-center justify-center rounded-lg bg-white/50 px-8 py-4 backdrop-blur-md">
+      <nav className="flex w-full items-center justify-center bg-white/50 px-8 py-4 backdrop-blur-md">
         <div className="flex w-full max-w-[1280px] items-center gap-4">
           <Link
             href="/"
@@ -15,7 +15,7 @@ export const Header = () => {
             Localization Tool
           </Link>
           <div className="flex flex-1 items-center gap-4 px-4">
-            <LinkBtn href="/">Excel To JSON</LinkBtn>
+            <LinkBtn href="/">Convert Excel</LinkBtn>
             <LinkBtn href="/modify">Modify JSON</LinkBtn>
           </div>
           <SpecialBtn href="https://github.com/kwei/cl-localization">
