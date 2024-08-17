@@ -5,6 +5,7 @@ import { CopyIcon } from '@/app/components/CopyIcon';
 import { useFocusRef } from '@/hooks/useFocusRef';
 import {
   createContext,
+  Fragment,
   ReactNode,
   useCallback,
   useContext,
@@ -58,14 +59,16 @@ const PreviewModal = ({
     <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-black/50">
       <div
         ref={ref}
-        className="flex h-[700px] w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg"
+        className="flex h-full w-full flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg md:h-[700px] md:w-[700px]"
       >
         <h3 className="w-full text-center text-xl font-bold">
           Preview Localization Result
         </h3>
         <div className="flex w-full flex-1 flex-col gap-4 overflow-y-auto p-4">
-          {Object.keys(data).map((key) => (
-            <LocalResultBlock key={key} local={key} value={data[key]} />
+          {Object.keys(data).map((locale) => (
+            <Fragment key={locale}>
+              <LocaleResultBlock locale={locale} value={data[locale]} />
+            </Fragment>
           ))}
         </div>
         <div className="flex w-full flex-row-reverse items-center">
@@ -82,18 +85,20 @@ const PreviewModal = ({
   );
 };
 
-const LocalResultBlock = ({
-  local,
+const LocaleResultBlock = ({
+  locale,
   value,
 }: {
-  local: string;
+  locale: string;
   value: Record<string, string>;
 }) => {
   const jsonValue = useMemo(() => JSON.stringify(value, undefined, 2), [value]);
   const [copied, setCopied] = useState<boolean>(false);
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(jsonValue).then();
+    navigator.clipboard
+      .writeText(jsonValue.slice(1, jsonValue.length - 2))
+      .then();
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -101,12 +106,9 @@ const LocalResultBlock = ({
   }, [jsonValue]);
 
   return (
-    <fieldset
-      key={local}
-      className="group relative w-full rounded-md border border-solid border-gray-500 px-4 pb-2"
-    >
-      <legend className="px-2 font-semibold">{local}</legend>
-      <pre className="w-full max-w-[580px] overflow-x-auto text-gray-500">
+    <fieldset className="group relative w-full rounded-md border border-solid border-gray-500 px-4 pb-2">
+      <legend className="px-2 font-semibold">{locale}</legend>
+      <pre className="w-full max-w-[280px] overflow-x-auto text-gray-500 md:max-w-[580px]">
         {jsonValue}
       </pre>
       <button

@@ -2,7 +2,7 @@
 
 import { CloseIcon } from '@/app/components/CloseIcon';
 import { useFileCtx } from '@/app/(site)/FileContext';
-import { useMemo, useRef } from 'react';
+import { Fragment, useMemo, useRef } from 'react';
 
 export const KeyEditor = () => {
   const { rows, selectedRows } = useFileCtx();
@@ -21,7 +21,7 @@ export const KeyEditor = () => {
   }, [rows, selectedRows]);
 
   return (
-    <div className="col-span-7 flex flex-col gap-4">
+    <div className="col-span-12 flex flex-col gap-4 md:col-span-7">
       <h3 className="w-full py-2 text-center text-xl font-bold">
         Edit Custom Key
       </h3>
@@ -34,15 +34,13 @@ export const KeyEditor = () => {
           placeholder="prefix.type"
         />
       </fieldset>
-      <div className="flex h-[500px] w-full flex-col gap-1 overflow-y-auto rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70">
+      <div className="flex min-h-[300px] w-full flex-1 flex-col gap-1 overflow-y-auto rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70">
         {originalKey.map(
           (key, index) =>
             key && (
-              <EditBlock
-                key={`${key.toString()}-${index.toString()}`}
-                label={key.toString()}
-                index={index}
-              />
+              <Fragment key={`${key.toString()}-${index.toString()}`}>
+                <EditBlock label={key.toString()} index={index} />
+              </Fragment>
             ),
         )}
       </div>
@@ -63,14 +61,14 @@ const EditBlock = ({ label, index }: { label: string; index: number }) => {
       key={`${label}-${index.toString()}`}
       className="group relative grid w-full grid-cols-12 gap-1"
     >
-      <div className="col-span-3 break-words rounded-md bg-gray-500/70 p-2">
+      <div className="col-span-4 break-words rounded-md bg-gray-500/70 p-2 md:col-span-3">
         {label}
       </div>
       <input
         type="text"
         ref={inputRef}
         name={`new-key-${index.toString()}`}
-        className="col-span-9 rounded-md border border-solid border-gray-500 bg-transparent p-2 pr-8 focus:outline-0"
+        className="col-span-8 rounded-md border border-solid border-gray-500 bg-transparent p-2 pr-8 focus:outline-0 md:col-span-9"
         defaultValue={label}
       />
       <button

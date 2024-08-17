@@ -8,7 +8,7 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState,
+  useState
 } from 'react';
 
 interface Props {
@@ -27,8 +27,10 @@ interface CtxVal {
 
 const initCtxVal = {
   value: '',
-  setValue: (_value: string) => {},
-  close: () => {},
+  setValue: (_value: string) => {
+  },
+  close: () => {
+  }
 };
 
 export const Dropdown = (props: Props) => {
@@ -37,7 +39,7 @@ export const Dropdown = (props: Props) => {
     value,
     placeholder = 'Select One',
     children,
-    onChange,
+    onChange
   } = props;
   const [selected, setSelected] = useState(value ?? '');
   const [open, setOpen] = useState(false);
@@ -50,20 +52,20 @@ export const Dropdown = (props: Props) => {
       setSelected(val);
       if (onChange) onChange(val);
     },
-    [onChange],
+    [onChange]
   );
 
   const ctxVal = useMemo(
     () => ({
       value: selected,
       setValue: handleOnChange,
-      close: () => setOpen(false),
+      close: () => setOpen(false)
     }),
-    [handleOnChange, selected],
+    [handleOnChange, selected]
   );
 
   return (
-    <div ref={ref} className="relative inline-block">
+    <div ref={ref} className="relative inline-block w-full">
       <button
         type="button"
         onClick={() => setOpen((prevState) => !prevState)}
@@ -86,10 +88,10 @@ export const Dropdown = (props: Props) => {
 const Ctx = createContext<CtxVal>(initCtxVal);
 
 export const DropdownOption = ({
-  value,
-  label,
-  className = '',
-}: {
+                                 value,
+                                 label,
+                                 className = ''
+                               }: {
   value: string;
   label: string;
   className?: string;

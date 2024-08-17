@@ -2,7 +2,7 @@
 
 import { useFileCtx } from '@/app/(site)/FileContext';
 import { useFocusRef } from '@/hooks/useFocusRef';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 import { Row } from 'read-excel-file';
 
 export const SelectorModal = ({ children }: { children: ReactNode }) => {
@@ -58,7 +58,7 @@ const Modal = ({
     <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-black/50">
       <div
         ref={ref}
-        className="flex h-[700px] w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg"
+        className="flex h-full w-full flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg md:h-[700px] md:w-[700px]"
       >
         <h3 className="w-full text-center text-xl font-bold">
           Select Data Rows
@@ -90,7 +90,7 @@ const PreviewExcel = ({ rows }: { rows: Row[] }) => {
   };
 
   return (
-    <div className="flex w-full flex-1 flex-col overflow-y-auto p-4">
+    <div className="flex w-full flex-1 flex-col overflow-y-auto md:p-4">
       <div className="flex w-full flex-row-reverse items-center gap-4 pb-4">
         <button
           type="button"
@@ -109,12 +109,9 @@ const PreviewExcel = ({ rows }: { rows: Row[] }) => {
       </div>
       <div className="h-full w-full overflow-y-auto pb-4">
         {rows.map((row, i) => (
-          <RowData
-            row={row}
-            index={i}
-            selected={selectAll}
-            key={`row-${i.toString()}`}
-          />
+          <Fragment key={`row-${i.toString()}`}>
+            <RowData row={row} index={i} selected={selectAll} />
+          </Fragment>
         ))}
       </div>
     </div>
