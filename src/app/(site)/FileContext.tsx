@@ -37,6 +37,8 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
       readSheetNames(file).then((sheetNames) => {
         setSheetNames(sheetNames);
       });
+    } else {
+      setSheetNames([]);
     }
   }, [file]);
 

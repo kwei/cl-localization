@@ -34,8 +34,8 @@ export const FileUploader = () => {
     clear();
     setFile(null);
     setSheetName('');
+    setTabName(undefined);
     if (!inputRef.current) return;
-    inputRef.current.files = null;
     inputRef.current.value = '';
   }, [clear, setFile, setSheetName]);
 
@@ -75,7 +75,7 @@ export const FileUploader = () => {
               type="text"
               name="sheetName"
               className="hidden"
-              value={tabName}
+              value={tabName ?? ''}
               readOnly
             />
           </div>

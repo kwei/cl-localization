@@ -20,7 +20,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
         [Locale.CHS]: 0,
         [Locale.KOR]: 0,
         [Locale.ITA]: 0,
-        [Locale.ESP]: 0
+        [Locale.ESP]: 0,
       };
     }
     const row = rows[0].map((data) => data?.toString());
@@ -39,7 +39,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
       [Locale.CHS]: row.indexOf(Locale.CHS),
       [Locale.KOR]: row.indexOf(Locale.KOR),
       [Locale.ITA]: row.indexOf(Locale.ITA),
-      [Locale.ESP]: row.indexOf(Locale.ESP)
+      [Locale.ESP]: row.indexOf(Locale.ESP),
     };
   }, [rows]);
 
@@ -51,8 +51,8 @@ export const Form = ({ children }: { children: ReactNode }) => {
       const newKeys: string[] = [];
       selectedRows.forEach((_, i) => {
         newKeys.push(
-          ((prefix !== '' ? prefix.trim() + '.' : '') +
-          formData.get(`new-key-${i}`))
+          (prefix !== '' ? prefix.trim() + '.' : '') +
+            formData.get(`new-key-${i}`),
         );
       });
       const result: Record<string, Record<string, string>> = {
@@ -64,7 +64,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
         [Locale.CHS]: {},
         [Locale.KOR]: {},
         [Locale.ITA]: {},
-        [Locale.ESP]: {}
+        [Locale.ESP]: {},
       };
       newKeys.forEach((key, i) => {
         Object.keys(localeIndex).forEach((locale) => {
@@ -76,7 +76,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
       setData(result);
       open(true);
     },
-    [selectedRows, setData, open, localeIndex, rows]
+    [selectedRows, setData, open, localeIndex, rows],
   );
 
   return (
