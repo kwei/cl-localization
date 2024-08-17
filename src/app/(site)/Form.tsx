@@ -68,7 +68,7 @@ export const Form = ({ children }: { children: ReactNode }) => {
       };
       newKeys.forEach((key, i) => {
         Object.keys(localeIndex).forEach((locale) => {
-          const index = localeIndex[locale];
+          const index = localeIndex[locale as Locale];
           const cell = rows[selectedRows[i]][index];
           result[locale][key] = cell ? cell.toString() : '';
         });
