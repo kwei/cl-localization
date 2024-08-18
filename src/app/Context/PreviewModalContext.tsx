@@ -59,7 +59,7 @@ const PreviewModal = ({
     <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-black/50">
       <div
         ref={ref}
-        className="flex h-full w-full flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg md:h-[700px] md:w-[700px]"
+        className="flex h-full w-full flex-col gap-4 bg-white p-4 shadow-lg md:h-[700px] md:w-[700px] md:rounded-2xl"
       >
         <h3 className="w-full text-center text-xl font-bold">
           Preview Localization Result

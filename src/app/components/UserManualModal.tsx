@@ -31,7 +31,7 @@ export const UserManualModal = forwardRef<UserManualModalRef, Props>(
       <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-black/60">
         <div
           ref={modalRef}
-          className="flex h-auto w-[700px] flex-col gap-4 rounded-2xl bg-white p-4 shadow-lg"
+          className="flex h-full w-full flex-col gap-4 bg-white p-4 shadow-lg md:h-auto md:w-[700px] md:rounded-2xl"
         >
           <h3 className="w-full text-center text-xl font-bold">User Manual</h3>
           <div className="w-full flex-1">{children}</div>
