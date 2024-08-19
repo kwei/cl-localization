@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        "gradient-main": "linear-gradient(to right, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%)"
+        "gradient-main": "linear-gradient(to right, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%)",
+        "gradient-selected": "linear-gradient(to right, #6a11cb 0%, #2575fc 100%)"
       },
     },
   },

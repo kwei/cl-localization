@@ -13,8 +13,10 @@ export const FileUploader = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [tabName, setTabName] = useState<string>();
   const { sheetNames, setFile, setSheetName, setOpenSelector } = useFileCtx();
-  const { file, getDropProperties, handleOnChange, clear } =
-    useFileUpload(ACCEPTED_FILE_TYPE);
+  const [localFile, setLocalFile] = useState<File | null>(null);
+  const { files, getDropProperties, handleOnChange, clear } = useFileUpload(
+    (_file) => _file.type === ACCEPTED_FILE_TYPE,
+  );
 
   const handleClick = useCallback(() => {
     inputRef.current?.click();
@@ -40,10 +42,11 @@ export const FileUploader = () => {
   }, [clear, setFile, setSheetName]);
 
   useEffect(() => {
-    if (file) {
-      setFile(file);
+    if (files && files['_default']) {
+      setFile(files['_default']);
+      setLocalFile(files['_default']);
     }
-  }, [file, setFile]);
+  }, [files, setFile]);
 
   return (
     <div className="col-span-12 flex flex-col gap-4 md:col-span-5">
@@ -90,7 +93,7 @@ export const FileUploader = () => {
         <button
           type="button"
           onClick={handleClear}
-          disabled={!file}
+          disabled={!localFile}
           className="cursor-pointer rounded-md bg-red-500/50 px-4 py-2 text-center text-lg transition-colors hover:bg-red-500/30"
         >
           Clear
@@ -103,11 +106,11 @@ export const FileUploader = () => {
         onClick={handleClick}
       >
         <div className="text-xl font-semibold">
-          {file ? (
+          {localFile ? (
             <div className="flex w-full flex-col text-base">
-              <span>{file.name}</span>
-              <span>{file.size} Bytes</span>
-              <span>{new Date(file.lastModified).toLocaleString()}</span>
+              <span>{localFile.name}</span>
+              <span>{localFile.size} Bytes</span>
+              <span>{new Date(localFile.lastModified).toLocaleString()}</span>
             </div>
           ) : (
             'Click to upload or drop the excel!'
