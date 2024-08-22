@@ -110,7 +110,9 @@ export const Dropdown = (props: Props) => {
             onFocus={() => setTyping(true)}
           />
         ) : (
-          <span>{value ?? placeholder}</span>
+          <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+            {value ?? placeholder}
+          </span>
         )}
         <CaretDownFillIcon />
       </button>

@@ -1,7 +1,8 @@
 'use client';
 
-import { CloseIcon } from '@/app/components/CloseIcon';
-import { UploadIcon } from '@/app/components/UploadIcon';
+import { CheckIcon } from '@/app/components/CheckIcon';
+import { SearchIcon } from '@/app/components/SearchIcon';
+import { TrashCanIcon } from '@/app/components/TrashCanIcon';
 import { useFileCtx } from '@/app/modify/FileContext';
 import { Locale, Locales } from '@/constants';
 import { useFileUpload } from '@/hooks/useFileUpload';
@@ -30,22 +31,37 @@ const FILE_NAME_LOCALE_MAP: Record<string, Locale> = {
   'zh_CN.json': Locale.CHS,
   'zh_TW.json': Locale.CHT,
 };
+const LOCALE_FILE_NAME_MAP: Record<Locale, string> = {
+  [Locale.DEU]: 'de_DE.json',
+  [Locale.Default]: 'en_US.json',
+  [Locale.ESP]: 'es_ES.json',
+  [Locale.FRA]: 'fr_FR.json',
+  [Locale.ITA]: 'it_IT.json',
+  [Locale.JPN]: 'ja_JP.json',
+  [Locale.KOR]: 'ko_KR.json',
+  [Locale.CHS]: 'zh_CN.json',
+  [Locale.CHT]: 'zh_TW.json',
+};
 
 export const FileUploader = () => {
   const { setFile, setOpenSelector } = useFileCtx();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { files, getDropProperties, handleOnChange, remove } = useFileUpload((_file) => {
-    return _file.type === ACCEPTED_FILE_TYPE &&
-      ACCEPTED_FILE_NAME.includes(_file.name)
-  }, FILE_NAME_LOCALE_MAP);
+  const { files, getDropProperties, handleOnChange, remove, clear } =
+    useFileUpload((_file) => {
+      return (
+        _file.type === ACCEPTED_FILE_TYPE &&
+        ACCEPTED_FILE_NAME.includes(_file.name)
+      );
+    }, FILE_NAME_LOCALE_MAP);
 
   const handleClick = useCallback(() => {
     inputRef.current?.click();
   }, []);
 
   const handleClear = useCallback(() => {
+    clear();
     setFile(null);
-  }, [setFile]);
+  }, [clear, setFile]);
 
   const handleSelectDataRows = useCallback(() => {
     if (!files) return;
@@ -67,87 +83,65 @@ export const FileUploader = () => {
       <h3 className="w-full py-2 text-center text-xl font-bold">
         Choose JSON Files
       </h3>
-      {!files && (
-        <div
-          className="relative flex h-[300px] w-full cursor-pointer items-center justify-center rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70"
-          {...getDropProperties()}
-          onClick={handleClick}
-        >
-          <span className="flex flex-col gap-1 text-xl font-semibold">
-            Click to upload or drop the excel!
-          </span>
-          <input
-            ref={inputRef}
-            type="file"
-            name="file"
-            onChange={handleOnChange}
-            accept="application/json"
-            hidden
-          />
-        </div>
-      )}
-      {files && (
-        <div className="flex w-full flex-col gap-1" {...getDropProperties()}>
-          {Locales.map((locale) => (
-            <div
-              key={locale}
-              className="grid grid-cols-12 divide-x divide-gray-500 rounded-md border border-solid border-gray-500"
-            >
-              <div className="col-span-2 flex items-center justify-center p-1">
-                <span>{locale}</span>
-              </div>
-              <div className="col-span-8 flex items-center p-1 px-2 text-left">
-                <span>{files[locale]?.name}</span>
-              </div>
-              <div className="col-span-2 flex items-center justify-between">
-                {files[locale] ? (
-                  <button
-                    type="button"
-                    title="Remove"
-                    onClick={() => handleRemoveFile(locale)}
-                    className="flex h-full w-full items-center justify-center rounded-r-md transition-colors hover:bg-red-300/50"
-                  >
-                    <CloseIcon />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    title="Upload"
-                    onClick={handleClick}
-                    className="flex h-full w-full items-center justify-center rounded-r-md transition-colors hover:bg-gray-300/50"
-                  >
-                    <UploadIcon />
-                    <input
-                      ref={inputRef}
-                      type="file"
-                      name="file"
-                      onChange={handleOnChange}
-                      accept="application/json"
-                      hidden
-                    />
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      <div className="flex w-full items-center gap-2 py-4">
-        <button
-          type="button"
-          onClick={handleClear}
-          className="flex-1 cursor-pointer rounded-md bg-red-500/50 px-4 py-2 text-center text-lg transition-colors hover:bg-red-500/30"
-        >
-          Clear
-        </button>
+      <div className="flex w-full items-center justify-end gap-2">
         <button
           type="button"
           onClick={handleSelectDataRows}
           disabled={!files || Object.keys(files).length !== 9}
-          className="flex-1 cursor-pointer rounded-md bg-green-500/50 px-4 py-2 text-center text-lg transition-colors hover:bg-green-500/30"
+          className="flex cursor-pointer items-center gap-2 rounded-md bg-green-500/50 px-4 py-2 text-center text-lg transition-colors hover:bg-green-500/30 disabled:cursor-default disabled:bg-gray-300"
         >
+          <SearchIcon />
           Parse
         </button>
+        <button
+          type="button"
+          onClick={handleClear}
+          className="cursor-pointer rounded-md bg-red-500/50 p-2 text-center text-lg transition-colors hover:bg-red-500/30 hover:text-red-500"
+        >
+          <TrashCanIcon />
+        </button>
+      </div>
+      <div
+        className="relative flex h-[200px] w-full cursor-pointer items-center justify-center rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70"
+        {...getDropProperties()}
+        onClick={handleClick}
+      >
+        <span className="flex flex-col gap-1 text-xl font-semibold">
+          Click to upload or drop the JSON files!
+        </span>
+        <input
+          ref={inputRef}
+          type="file"
+          name="file"
+          onChange={handleOnChange}
+          accept="application/json"
+          hidden
+        />
+      </div>
+      <div className="grid grid-cols-3 gap-2 text-sm">
+        {Locales.map((locale) => (
+          <div
+            key={locale}
+            className={`group relative col-span-1 flex items-center gap-1 overflow-hidden rounded-md border border-solid px-2 py-1 transition-all ${files && files[locale] ? 'border-green-500 bg-green-500/30 hover:border-red-500' : 'border-gray-300 bg-gray-300'}`}
+          >
+            <span className="flex size-4 items-center justify-center rounded-full border border-solid border-black">
+              {files && files[locale] && <CheckIcon />}
+            </span>
+            <span className="font-semibold">
+              {LOCALE_FILE_NAME_MAP[locale]}
+            </span>
+            {files && files[locale] && (
+              <button
+                type="button"
+                onClick={() => handleRemoveFile(locale)}
+                className="absolute bottom-0 left-full top-0 flex w-full items-center justify-start gap-2 whitespace-nowrap bg-red-300 px-2 py-1 transition-all group-hover:left-0"
+              >
+                <TrashCanIcon />
+                Remove
+              </button>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

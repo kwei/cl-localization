@@ -13,7 +13,7 @@ export default function Home() {
           <FileContext>
             <FormHandler.Form>
               <h1 className="w-full pb-4 pt-8 text-center text-3xl font-bold text-black">
-                Coming Soon!
+                Modify Existed JSON by Locale
               </h1>
               <div className="grid w-full grid-cols-12 gap-4 py-4">
                 <SelectorModal>

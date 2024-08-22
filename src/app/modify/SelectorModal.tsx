@@ -98,6 +98,7 @@ const SelectRows = ({ data }: { data: Record<string, string> }) => {
       <div className="flex w-full">
         <Dropdown
           placeholder="Select Key"
+          value={Object.keys(selectedRows).join(', ') || undefined}
           onChange={handleOnSelectKey}
           className="rounded-md border border-solid border-gray-500 p-2"
         >

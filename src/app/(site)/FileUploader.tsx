@@ -64,19 +64,21 @@ export const FileUploader = () => {
               onChange={handleOnChangeTab}
               searchable
             >
-              <div className="flex max-h-[350px] flex-col gap-1 overflow-y-auto rounded-md border border-solid border-gray-500 bg-gray-300 p-2">
-                {sheetNames.map((tab) => (
-                  <Fragment key={tab}>
-                    <DropdownOption
-                      value={tab}
-                      label={tab}
-                      className={`${tabName === tab ? 'bg-white/70' : ''} rounded-sm px-4 py-1 text-left transition-colors hover:bg-white/50`}
-                    >
-                      {tab}
-                    </DropdownOption>
-                  </Fragment>
-                ))}
-              </div>
+              {sheetNames.length > 0 && (
+                <div className="flex max-h-[350px] flex-col gap-1 overflow-y-auto rounded-md border border-solid border-gray-500 bg-gray-300 p-2">
+                  {sheetNames.map((tab) => (
+                    <Fragment key={tab}>
+                      <DropdownOption
+                        value={tab}
+                        label={tab}
+                        className={`${tabName === tab ? 'bg-white/70' : ''} rounded-sm px-4 py-1 text-left transition-colors hover:bg-white/50`}
+                      >
+                        {tab}
+                      </DropdownOption>
+                    </Fragment>
+                  ))}
+                </div>
+              )}
             </Dropdown>
             <input
               type="text"
