@@ -52,7 +52,7 @@ export const Switch = (props: Props) => {
       className={`${className} relative flex items-center justify-between rounded-md bg-gray-500 p-1`}
     >
       <span
-        className="absolute bottom-1 top-1 z-10 rounded-sm bg-gray-200 transition-all"
+        className="absolute bottom-1 top-1 z-10 rounded bg-gray-200 transition-all"
         style={{
           width: labelWidth,
           left: flag ? leftWidth : '4px',

@@ -3,12 +3,15 @@
 import { CaretDownFillIcon } from '@/app/components/CaretDownFillIcon';
 import { useFocusRef } from '@/hooks/useFocusRef';
 import {
+  ChangeEvent,
   createContext,
+  HTMLAttributes,
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
-  useState
+  useState,
 } from 'react';
 
 interface Props {
@@ -17,20 +20,21 @@ interface Props {
   placeholder?: string;
   children: ReactNode;
   onChange?: (value: string) => void;
+  searchable?: boolean;
 }
 
 interface CtxVal {
   value: string;
+  search: string;
   setValue: (value: string) => void;
   close: () => void;
 }
 
 const initCtxVal = {
   value: '',
-  setValue: (_value: string) => {
-  },
-  close: () => {
-  }
+  search: '',
+  setValue: (_value: string) => {},
+  close: () => {},
 };
 
 export const Dropdown = (props: Props) => {
@@ -39,39 +43,75 @@ export const Dropdown = (props: Props) => {
     value,
     placeholder = 'Select One',
     children,
-    onChange
+    onChange,
+    searchable = false,
   } = props;
   const [selected, setSelected] = useState(value ?? '');
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [typing, setTyping] = useState(false);
   const ref = useFocusRef<HTMLDivElement>(() => {
     setOpen(false);
+    setTyping(false);
   });
 
   const handleOnChange = useCallback(
     (val: string) => {
       setSelected(val);
       if (onChange) onChange(val);
+      setSearch('');
     },
-    [onChange]
+    [onChange],
   );
+
+  const handleOnClick = useCallback(() => {
+    if (typing) {
+      setOpen(true);
+    } else {
+      setOpen((prevState) => !prevState);
+    }
+  }, [typing]);
+
+  const handleSearchTabName = useCallback((event: ChangeEvent) => {
+    setSearch((event.target as HTMLInputElement).value ?? '');
+  }, []);
 
   const ctxVal = useMemo(
     () => ({
       value: selected,
+      search,
       setValue: handleOnChange,
-      close: () => setOpen(false)
+      close: () => setOpen(false),
     }),
-    [handleOnChange, selected]
+    [handleOnChange, search, selected],
   );
+
+  useEffect(() => {
+    if (search !== '') {
+      setSelected('');
+      if (onChange) onChange('');
+    }
+  }, [onChange, search]);
 
   return (
     <div ref={ref} className="relative inline-block w-full">
       <button
         type="button"
-        onClick={() => setOpen((prevState) => !prevState)}
+        onClick={handleOnClick}
         className={`peer ${className} flex w-full items-center justify-between gap-4 font-semibold`}
       >
-        <span>{value ?? placeholder}</span>
+        {searchable ? (
+          <input
+            type="text"
+            className="bg-transparent focus:outline-0"
+            placeholder={placeholder}
+            value={search || value}
+            onChange={handleSearchTabName}
+            onFocus={() => setTyping(true)}
+          />
+        ) : (
+          <span>{value ?? placeholder}</span>
+        )}
         <CaretDownFillIcon />
       </button>
       <div
@@ -88,24 +128,36 @@ export const Dropdown = (props: Props) => {
 const Ctx = createContext<CtxVal>(initCtxVal);
 
 export const DropdownOption = ({
-                                 value,
-                                 label,
-                                 className = ''
-                               }: {
+  value,
+  label,
+  children,
+  className = '',
+  closeOnSelect = true,
+  ...legacy
+}: {
   value: string;
-  label: string;
+  label?: string;
+  children?: ReactNode;
   className?: string;
-}) => {
-  const { setValue, close } = useContext(Ctx);
+  closeOnSelect?: boolean;
+} & HTMLAttributes<HTMLButtonElement>) => {
+  const { setValue, close, search } = useContext(Ctx);
 
   const handleOnSelect = useCallback(() => {
     setValue(value);
-    close();
-  }, [close, setValue, value]);
+    if (closeOnSelect) close();
+  }, [close, closeOnSelect, setValue, value]);
+
+  if (label && !label.includes(search)) return null;
 
   return (
-    <button type="button" onClick={handleOnSelect} className={className}>
-      {label}
+    <button
+      type="button"
+      {...legacy}
+      onClick={handleOnSelect}
+      className={className}
+    >
+      {label ?? children}
     </button>
   );
 };

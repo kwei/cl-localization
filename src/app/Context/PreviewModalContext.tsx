@@ -2,7 +2,8 @@
 
 import { CheckIcon } from '@/app/components/CheckIcon';
 import { CopyIcon } from '@/app/components/CopyIcon';
-import { useFocusRef } from '@/hooks/useFocusRef';
+import { Modal } from '@/app/components/Modal';
+import { Locales } from '@/constants';
 import {
   createContext,
   Fragment,
@@ -52,36 +53,21 @@ const PreviewModal = ({
   data: Record<string, Record<string, string>>;
 }) => {
   const { open } = usePreviewModal();
-  const ref = useFocusRef<HTMLDivElement>(() => {
+
+  const handleOnClose = useCallback(() => {
     open(false);
-  });
+  }, [open]);
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-black/50">
-      <div
-        ref={ref}
-        className="flex h-full w-full flex-col gap-4 bg-white p-4 shadow-lg md:h-[700px] md:w-[700px] md:rounded-2xl"
-      >
-        <h3 className="w-full text-center text-xl font-bold">
-          Preview Localization Result
-        </h3>
-        <div className="flex w-full flex-1 flex-col gap-4 overflow-y-auto p-4">
-          {Object.keys(data).map((locale) => (
-            <Fragment key={locale}>
-              <LocaleResultBlock locale={locale} value={data[locale]} />
-            </Fragment>
-          ))}
-        </div>
-        <div className="flex w-full flex-row-reverse items-center">
-          <button
-            type="button"
-            onClick={() => open(false)}
-            className="rounded-md bg-green-500/50 px-4 py-2 transition-colors hover:bg-green-500/30"
-          >
-            Close
-          </button>
-        </div>
+    <Modal title="Preview Localization Result" onClose={handleOnClose}>
+      <div className="flex w-full flex-1 flex-col gap-4 overflow-y-auto p-4">
+        {Locales.map((locale) => (
+          <Fragment key={locale}>
+            <LocaleResultBlock locale={locale} value={data[locale]} />
+          </Fragment>
+        ))}
       </div>
-    </div>
+    </Modal>
   );
 };
 

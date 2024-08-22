@@ -7,12 +7,12 @@ import { SelectorModal } from '@/app/modify/SelectorModal';
 
 export default function Home() {
   return (
-    <main className="flex w-full flex-1 items-center justify-center px-6 pb-8">
+    <main className="flex w-full flex-1 justify-center px-6 pb-8">
       <div className="h-full w-full max-w-[1280px]">
         <PreviewModalContext>
           <FileContext>
             <FormHandler.Form>
-              <h1 className="w-full py-4 text-center text-3xl font-bold text-black">
+              <h1 className="w-full pb-4 pt-8 text-center text-3xl font-bold text-black">
                 Coming Soon!
               </h1>
               <div className="grid w-full grid-cols-12 gap-4 py-4">

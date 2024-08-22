@@ -1,4 +1,5 @@
 import { GithubIcon } from '@/app/components/GithubIcon';
+import { LinkBtn } from '@/app/components/LinkBtn';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -34,17 +35,6 @@ export const Header = () => {
       </nav>
       <div className="w-full md:hidden"></div>
     </div>
-  );
-};
-
-const LinkBtn = ({ href, children }: { href: string; children: ReactNode }) => {
-  return (
-    <Link
-      href={href}
-      className="font-semibold transition-colors hover:text-pink-500"
-    >
-      {children}
-    </Link>
   );
 };
 

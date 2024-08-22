@@ -31,7 +31,7 @@ export const KeyEditor = () => {
           type="text"
           name="prefix"
           className="w-full bg-transparent px-2 focus:outline-0"
-          placeholder="prefix.type"
+          placeholder="custom.prefix.key"
         />
       </fieldset>
       <div className="flex min-h-[300px] w-full flex-1 flex-col gap-1 overflow-y-auto rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70">

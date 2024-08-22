@@ -1,10 +1,11 @@
 'use client';
 
 import { KeyEditBlock } from '@/app/components/KeyEditorBlock';
+import { PlusIcon } from '@/app/components/PlusIcon';
 import { Switch } from '@/app/components/Switch';
 import { useFileCtx } from '@/app/modify/FileContext';
-import { Locale } from '@/constants';
-import { useMemo, useState } from 'react';
+import { Locale, Locales } from '@/constants';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 
 export const Editor = () => {
   const [isEditKey, setIsEditKey] = useState(false);
@@ -23,17 +24,65 @@ export const Editor = () => {
           trueLabel="Edit Key"
         />
       </h3>
-      <div className="flex min-h-[300px] w-full flex-1 flex-col gap-1 overflow-y-auto rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70">
-        {isEditKey ? <EditKey /> : <EditValue />}
+      <div className="flex min-h-[300px] w-full flex-1 flex-col gap-6 rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70">
+        <AddNewKey />
+        <>
+          <EditKey isShow={isEditKey} />
+          <EditValue isShow={!isEditKey} />
+        </>
       </div>
     </div>
   );
 };
 
-const EditKey = () => {
-  const { data, selectedRows } = useFileCtx();
+const AddNewKey = () => {
+  const { setNewKeys, newKeys } = useFileCtx();
+  const [newKey, setNewKey] = useState('');
+  const [keyExists, setKeyExists] = useState(false);
+
+  const handleOnChange = (event: ChangeEvent) => {
+    setNewKey((event.target as HTMLInputElement).value.trim());
+  };
+
+  const handleSetNewKeys = useCallback(() => {
+    const newKeySet = new Set<string>(newKeys);
+    if (newKeySet.has(newKey)) setKeyExists(true);
+    else {
+      setNewKeys(Array.from(newKeySet.add(newKey)));
+      setNewKey('');
+    }
+  }, [newKeys, newKey, setNewKeys]);
+
+  return (
+    <div className="relative flex w-full items-center rounded-md bg-gray-50 p-1">
+      <label className="px-2 py-1 font-semibold">New Key :</label>
+      <input
+        type="text"
+        className="flex-1 bg-transparent px-2 py-1 focus:outline-0"
+        value={newKey}
+        onChange={handleOnChange}
+        onFocus={() => setKeyExists(false)}
+      />
+      <button
+        type="button"
+        onClick={handleSetNewKeys}
+        className="flex h-full items-center justify-center rounded bg-blue-500/70 py-1 pl-2 pr-3 font-semibold transition-colors hover:bg-blue-500/50"
+      >
+        <PlusIcon />
+        Add
+      </button>
+      <span className="absolute left-2 top-full text-sm text-red-500">
+        {keyExists && `Key "${newKey}" is Existed.`}
+      </span>
+    </div>
+  );
+};
+
+const EditKey = ({ isShow }: { isShow: boolean }) => {
+  const { data, selectedRows, newKeys, setNewKeys } = useFileCtx();
 
   const defaultData = useMemo(() => data[Locale.Default], [data]);
+
   const selectedKeys = useMemo(() => {
     const res: string[] = [];
     if (!defaultData) return [];
@@ -43,17 +92,104 @@ const EditKey = () => {
     return res;
   }, [defaultData, selectedRows]);
 
+  const handleOnRemoveKey = useCallback(
+    (index: number) => {
+      const i = index - selectedKeys.length;
+      setNewKeys((prevState) => {
+        const newState = [...prevState];
+        newState.splice(i, 1);
+        return newState;
+      });
+    },
+    [selectedKeys.length, setNewKeys],
+  );
+
   return (
-    <>
+    <div
+      className={`flex w-full flex-1 flex-col gap-1 ${isShow ? '' : 'hidden'}`}
+    >
       {selectedKeys.map((key, i) => (
-        <KeyEditBlock key={key} label={key} index={i} />
+        <KeyEditBlock key={key} label={key} index={selectedRows[i]} />
       ))}
-    </>
+      {newKeys.map((key, i) => (
+        <KeyEditBlock
+          key={key}
+          label={key}
+          index={selectedKeys.length + i}
+          handleOnRemove={handleOnRemoveKey}
+        />
+      ))}
+    </div>
   );
 };
 
-const EditValue = () => {
-  const { data, selectedRows } = useFileCtx();
+const EditValue = ({ isShow }: { isShow: boolean }) => {
+  const { data, newKeys, selectedRows } = useFileCtx();
 
-  return <>Coming Soon!</>;
+  const hasData = useMemo(() => Object.keys(data).length === 9, [data]);
+
+  return (
+    <div
+      className={`flex w-full flex-1 flex-col gap-1 ${isShow ? '' : 'hidden'}`}
+    >
+      {hasData &&
+        Locales.map((locale) => (
+          <fieldset key={locale} className="flex flex-col gap-1 pb-4 pt-2">
+            <legend className="font-bold">{locale}</legend>
+            <EditValueBlock
+              locale={locale}
+              data={data[locale]}
+              selectedRows={selectedRows}
+            />
+            {newKeys.map((key) => (
+              <EditValueBlock locale={locale} key={key} data={{ [key]: '' }} />
+            ))}
+          </fieldset>
+        ))}
+    </div>
+  );
+};
+
+const EditValueBlock = ({
+  data,
+  selectedRows,
+  locale,
+}: {
+  data: Record<string, string>;
+  locale: string;
+  selectedRows?: number[];
+}) => {
+  const filteredData = useMemo(() => {
+    const res: Record<string, string> = {};
+    Object.keys(data).forEach((key, i) => {
+      if (!selectedRows || selectedRows.includes(i)) {
+        res[key] = data[key];
+      }
+    });
+    return res;
+  }, [data, selectedRows]);
+
+  return (
+    <div className="flex w-full flex-col gap-1">
+      {Object.keys(filteredData).map((key) => (
+        <div
+          key={key}
+          className="flex w-full items-center divide-x divide-gray-500 rounded border border-solid border-gray-500 bg-gray-50"
+        >
+          <label
+            title={key}
+            className="w-[200px] overflow-hidden text-ellipsis rounded-l bg-gray-300 px-2 py-1"
+          >
+            {key}
+          </label>
+          <input
+            type="text"
+            name={`${locale}-new-value-${key}`}
+            className="flex-1 border-0 bg-transparent px-2 py-1 focus:outline-0"
+            defaultValue={filteredData[key]}
+          />
+        </div>
+      ))}
+    </div>
+  );
 };

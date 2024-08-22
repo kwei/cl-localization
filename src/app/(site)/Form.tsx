@@ -1,6 +1,7 @@
 'use client';
 
 import { useFileCtx } from '@/app/(site)/FileContext';
+import { BookIcon } from '@/app/components/BookIcon';
 import { usePreviewModal } from '@/app/Context/PreviewModalContext';
 import { Locale } from '@/constants';
 import { FormEvent, ReactNode, useCallback, useMemo } from 'react';
@@ -96,9 +97,10 @@ export const ActionBar = () => {
     <div className="flex w-full flex-row-reverse items-center">
       <button
         type="submit"
-        className="cursor-pointer rounded-md bg-blue-500/70 px-4 py-2 transition-colors hover:bg-blue-500/50"
+        className="flex cursor-pointer items-center gap-2 rounded-md bg-blue-500/70 px-4 py-2 transition-colors hover:bg-blue-500/50"
         disabled={rows.length === 0}
       >
+        <BookIcon />
         Preview
       </button>
     </div>

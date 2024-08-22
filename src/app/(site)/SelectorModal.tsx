@@ -1,7 +1,7 @@
 'use client';
 
 import { useFileCtx } from '@/app/(site)/FileContext';
-import { useFocusRef } from '@/hooks/useFocusRef';
+import { Modal } from '@/app/components/Modal';
 import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 import { Row } from 'read-excel-file';
 
@@ -29,12 +29,12 @@ export const SelectorModal = ({ children }: { children: ReactNode }) => {
   return (
     <>
       {children}
-      {show && <Modal rows={rows} onConfirm={handleOnConfirm} />}
+      {show && <ModalContent rows={rows} onConfirm={handleOnConfirm} />}
     </>
   );
 };
 
-const Modal = ({
+const ModalContent = ({
   rows,
   onConfirm,
 }: {
@@ -42,9 +42,11 @@ const Modal = ({
   onConfirm: (rows: number[]) => void;
 }) => {
   const { setOpenSelector } = useFileCtx();
-  const ref = useFocusRef<HTMLDivElement>(() => {
+
+  const handleOnClose = useCallback(() => {
     setOpenSelector(false);
-  });
+  }, [setOpenSelector]);
+
   const handleOnConfirm = useCallback(() => {
     const selectedRows: number[] = [];
     for (let i = 0; i < rows.length; i++) {
@@ -55,26 +57,13 @@ const Modal = ({
   }, [onConfirm, rows.length]);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-black/50">
-      <div
-        ref={ref}
-        className="flex h-full w-full flex-col gap-4 bg-white p-4 shadow-lg md:h-[700px] md:w-[700px] md:rounded-2xl"
-      >
-        <h3 className="w-full text-center text-xl font-bold">
-          Select Data Rows
-        </h3>
-        <PreviewExcel rows={rows} />
-        <div className="flex w-full flex-row-reverse items-center">
-          <button
-            type="button"
-            onClick={handleOnConfirm}
-            className="rounded-md bg-green-500/50 px-4 py-2 transition-colors hover:bg-green-500/30"
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
-    </div>
+    <Modal
+      title="Select Data Rows"
+      onClose={handleOnClose}
+      onConfirm={handleOnConfirm}
+    >
+      <PreviewExcel rows={rows} />
+    </Modal>
   );
 };
 

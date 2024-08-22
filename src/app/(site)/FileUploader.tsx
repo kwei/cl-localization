@@ -3,6 +3,7 @@
 import { useFileCtx } from '@/app/(site)/FileContext';
 import { Dropdown, DropdownOption } from '@/app/components/Dropdown';
 import { SearchIcon } from '@/app/components/SearchIcon';
+import { TrashCanIcon } from '@/app/components/TrashCanIcon';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -61,6 +62,7 @@ export const FileUploader = () => {
               placeholder="Choose Tab"
               className="w-full rounded-l-md border border-r-0 border-solid border-gray-500 bg-gray-300 px-4 py-2 transition-colors hover:bg-gray-300/50"
               onChange={handleOnChangeTab}
+              searchable
             >
               <div className="flex max-h-[350px] flex-col gap-1 overflow-y-auto rounded-md border border-solid border-gray-500 bg-gray-300 p-2">
                 {sheetNames.map((tab) => (
@@ -69,7 +71,9 @@ export const FileUploader = () => {
                       value={tab}
                       label={tab}
                       className={`${tabName === tab ? 'bg-white/70' : ''} rounded-sm px-4 py-1 text-left transition-colors hover:bg-white/50`}
-                    />
+                    >
+                      {tab}
+                    </DropdownOption>
                   </Fragment>
                 ))}
               </div>
@@ -85,18 +89,19 @@ export const FileUploader = () => {
           <button
             type="button"
             onClick={handleSearchFile}
-            className="col-span-1 flex items-center justify-center rounded-r-md border border-solid border-gray-500 bg-green-400/70 px-3 leading-6 transition-colors hover:bg-green-400/50"
+            className="col-span-1 flex items-center justify-center gap-2 rounded-r-md border border-solid border-gray-500 bg-green-400/70 px-3 leading-6 transition-colors hover:bg-green-400/50"
           >
             <SearchIcon />
+            Parse
           </button>
         </div>
         <button
           type="button"
           onClick={handleClear}
           disabled={!localFile}
-          className="cursor-pointer rounded-md bg-red-500/50 px-4 py-2 text-center text-lg transition-colors hover:bg-red-500/30"
+          className="cursor-pointer rounded-md bg-red-500/50 p-2 text-center text-lg transition-colors hover:bg-red-500/30 hover:text-red-500"
         >
-          Clear
+          <TrashCanIcon />
         </button>
       </div>
       <button
