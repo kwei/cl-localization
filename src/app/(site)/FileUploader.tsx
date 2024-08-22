@@ -38,6 +38,7 @@ export const FileUploader = () => {
     setFile(null);
     setSheetName('');
     setTabName(undefined);
+    setLocalFile(null);
     if (!inputRef.current) return;
     inputRef.current.value = '';
   }, [clear, setFile, setSheetName]);
