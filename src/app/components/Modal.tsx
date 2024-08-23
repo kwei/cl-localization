@@ -3,6 +3,7 @@
 import { CheckIcon } from '@/app/components/CheckIcon';
 import { CloseIcon } from '@/app/components/CloseIcon';
 import { useFocusRef } from '@/hooks/useFocusRef';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { ReactNode } from 'react';
 
 export const Modal = (props: {
@@ -10,16 +11,38 @@ export const Modal = (props: {
   children: ReactNode;
   onClose: () => void;
   onConfirm?: () => void;
+  options?: {
+    width?: string;
+    height?: string;
+  };
 }) => {
-  const { title, children, onClose, onConfirm } = props;
+  const defaultOption = {
+    width: '700px',
+    height: '700px',
+  };
+  const {
+    title,
+    children,
+    onClose,
+    onConfirm,
+    options = defaultOption,
+  } = props;
+  const isMd = useMediaQuery({
+    minWidth: 768,
+  });
   const ref = useFocusRef<HTMLDivElement>(() => {
     onClose();
   });
+
   return (
     <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-black/50">
       <div
         ref={ref}
-        className="relative flex h-full w-full flex-col gap-4 bg-white p-4 shadow-lg md:h-[700px] md:w-[700px] md:rounded-2xl"
+        className="relative flex flex-col gap-4 bg-white p-4 shadow-lg md:rounded-2xl"
+        style={{
+          width: isMd ? options.width : '100%',
+          height: isMd ? options.height : '100%',
+        }}
       >
         <h3 className="w-full pt-4 text-center text-xl font-bold">{title}</h3>
         {children}

@@ -35,7 +35,13 @@ export const UserManualModal = forwardRef<UserManualModalRef, Props>(
     if (!isOpen) return null;
 
     return (
-      <Modal title="User Manual" onClose={handleOnClose}>
+      <Modal
+        title="User Manual"
+        onClose={handleOnClose}
+        options={{
+          height: 'auto',
+        }}
+      >
         <div className="w-full flex-1">{children}</div>
       </Modal>
     );

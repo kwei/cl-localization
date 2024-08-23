@@ -17,7 +17,7 @@ export const UserManual = ({ children }: { children: ReactNode }) => {
     <>
       <button
         type="button"
-        className="w-fit underline transition-colors hover:text-yellow-500"
+        className="w-fit font-semibold underline transition-colors hover:text-yellow-500"
         onClick={openModal}
         title="How to use?"
       >

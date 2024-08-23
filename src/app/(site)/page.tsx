@@ -24,8 +24,8 @@ export default function Home() {
                           to convert to json.
                         </li>
                         <li>
-                          Choose the tab name of the excel, then click the
-                          search button.
+                          Choose the tab name of the excel, then click the parse
+                          button.
                         </li>
                         <li>
                           Select the rows that you want to use in the upcoming
