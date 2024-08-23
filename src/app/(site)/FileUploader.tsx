@@ -93,7 +93,7 @@ export const FileUploader = () => {
             type="button"
             onClick={handleSearchFile}
             disabled={!tabName || tabName.trim() === ''}
-            className="col-span-1 flex items-center justify-center gap-2 rounded-r-md border border-solid border-gray-500 bg-green-400/70 px-3 leading-6 transition-colors hover:bg-green-400/50 disabled:cursor-default disabled:bg-gray-300"
+            className="col-span-1 flex items-center gap-2 rounded-r-md border border-solid border-gray-500 bg-green-400/70 px-3 leading-6 transition-colors hover:bg-green-400/50 disabled:cursor-default disabled:bg-gray-300"
           >
             <SearchIcon />
             Parse

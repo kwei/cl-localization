@@ -83,16 +83,19 @@ export const FileUploader = () => {
       <h3 className="w-full py-2 text-center text-xl font-bold">
         Choose JSON Files
       </h3>
-      <div className="flex w-full items-center justify-end gap-2">
-        <button
-          type="button"
-          onClick={handleSelectDataRows}
-          disabled={!files || Object.keys(files).length !== 9}
-          className="flex cursor-pointer items-center gap-2 rounded-md bg-green-500/50 px-4 py-2 text-center text-lg transition-colors hover:bg-green-500/30 disabled:cursor-default disabled:bg-gray-300"
-        >
-          <SearchIcon />
-          Parse
-        </button>
+      <div className="flex w-full items-center justify-end gap-4">
+        <div className="grid w-full grid-cols-5">
+          <div className="col-span-4"></div>
+          <button
+            type="button"
+            onClick={handleSelectDataRows}
+            disabled={!files || Object.keys(files).length !== 9}
+            className="col-span-1 flex cursor-pointer items-center gap-2 rounded-md border border-solid border-gray-500 bg-green-500/50 px-3 py-2 text-base leading-6 transition-colors hover:bg-green-500/30 disabled:cursor-default disabled:bg-gray-300"
+          >
+            <SearchIcon />
+            Parse
+          </button>
+        </div>
         <button
           type="button"
           onClick={handleClear}

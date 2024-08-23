@@ -24,12 +24,10 @@ export const Editor = () => {
           trueLabel="Edit Key"
         />
       </h3>
+      <AddNewKey />
       <div className="flex min-h-[300px] w-full flex-1 flex-col gap-6 rounded-md border-4 border-dashed border-gray-500 p-4 transition-colors hover:border-gray-500/70">
-        <AddNewKey />
-        <>
-          <EditKey isShow={isEditKey} />
-          <EditValue isShow={!isEditKey} />
-        </>
+        <EditKey isShow={isEditKey} />
+        <EditValue isShow={!isEditKey} />
       </div>
     </div>
   );
@@ -54,11 +52,11 @@ const AddNewKey = () => {
   }, [newKeys, newKey, setNewKeys]);
 
   return (
-    <div className="relative flex w-full items-center rounded-md bg-gray-50 p-1">
-      <label className="px-2 py-1 font-semibold">New Key :</label>
+    <div className="relative flex w-full items-center divide-x divide-gray-500 rounded-md border border-solid border-gray-500 bg-transparent">
+      <label className="px-4 py-2 font-semibold">New Key</label>
       <input
         type="text"
-        className="flex-1 bg-transparent px-2 py-1 focus:outline-0"
+        className="flex-1 bg-transparent p-2 focus:outline-0"
         value={newKey}
         onChange={handleOnChange}
         onFocus={() => setKeyExists(false)}
@@ -66,7 +64,7 @@ const AddNewKey = () => {
       <button
         type="button"
         onClick={handleSetNewKeys}
-        className="flex h-full items-center justify-center rounded bg-blue-500/70 py-1 pl-2 pr-3 font-semibold transition-colors hover:bg-blue-500/50"
+        className="flex h-full items-center justify-center gap-2 rounded-r-md bg-gray-500/30 px-2 pr-3 font-semibold transition-colors hover:bg-gray-500/10"
       >
         <PlusIcon />
         Add
