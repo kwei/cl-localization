@@ -1,5 +1,5 @@
 import { UserManual } from '@/app/components/UserManual';
-import { PreviewModalContext } from '@/app/Context/PreviewModalContext';
+import { PreviewChangeContext } from '@/app/Context/PreviewChangeContext';
 import { Editor } from '@/app/modify/Editor';
 import { FileContext } from '@/app/modify/FileContext';
 import { FileUploader } from '@/app/modify/FileUploader';
@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="flex w-full flex-1 justify-center px-6 pb-8">
       <div className="h-full w-full max-w-[1280px]">
-        <PreviewModalContext>
+        <PreviewChangeContext>
           <FileContext>
             <FormHandler.Form>
               <h1 className="relative w-full pb-4 pt-8 text-center text-2xl font-bold text-black md:text-3xl">
@@ -50,7 +50,7 @@ export default function Home() {
               <FormHandler.ActionBar />
             </FormHandler.Form>
           </FileContext>
-        </PreviewModalContext>
+        </PreviewChangeContext>
       </div>
     </main>
   );
