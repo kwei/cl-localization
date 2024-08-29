@@ -11,6 +11,7 @@ export const Modal = (props: {
   children: ReactNode;
   onClose: () => void;
   onConfirm?: () => void;
+  confirmLabel?: ReactNode;
   options?: {
     width?: string;
     height?: string;
@@ -25,6 +26,12 @@ export const Modal = (props: {
     children,
     onClose,
     onConfirm,
+    confirmLabel = (
+      <>
+        <CheckIcon />
+        Confirm
+      </>
+    ),
     options = defaultOption,
   } = props;
   const isMd = useMediaQuery({
@@ -60,8 +67,7 @@ export const Modal = (props: {
               onClick={onConfirm}
               className="flex items-center gap-2 rounded-md bg-green-500/50 px-4 py-2 transition-colors hover:bg-green-500/30"
             >
-              <CheckIcon />
-              Confirm
+              {confirmLabel}
             </button>
           )}
         </div>

@@ -7,7 +7,13 @@ import { Locale, Locales } from '@/constants';
 import { FormEvent, ReactNode, useCallback } from 'react';
 
 export const Form = ({ children }: { children: ReactNode }) => {
-  const { data, originalKeys, selectedRows, newKeys } = useFileCtx();
+  const {
+    originalKeys,
+    selectedRows,
+    newKeys,
+    setUpdatedOriginalKeys,
+    setUpdatedNewKeys,
+  } = useFileCtx();
   const { setData, open } = usePreviewChangeModal();
 
   const handleOnSubmit = useCallback(
@@ -21,29 +27,25 @@ export const Form = ({ children }: { children: ReactNode }) => {
         (_, i) => formData.get(`new-key-${selectedRows.length + i}`) as string,
       );
       const result: Record<string, Record<string, string>> = {
-        [Locale.Default]: { ...data[Locale.Default] },
-        [Locale.FRA]: { ...data[Locale.FRA] },
-        [Locale.JPN]: { ...data[Locale.JPN] },
-        [Locale.DEU]: { ...data[Locale.DEU] },
-        [Locale.CHT]: { ...data[Locale.CHT] },
-        [Locale.CHS]: { ...data[Locale.CHS] },
-        [Locale.KOR]: { ...data[Locale.KOR] },
-        [Locale.ITA]: { ...data[Locale.ITA] },
-        [Locale.ESP]: { ...data[Locale.ESP] },
+        [Locale.Default]: {},
+        [Locale.FRA]: {},
+        [Locale.JPN]: {},
+        [Locale.DEU]: {},
+        [Locale.CHT]: {},
+        [Locale.CHS]: {},
+        [Locale.KOR]: {},
+        [Locale.ITA]: {},
+        [Locale.ESP]: {},
       };
+      setUpdatedOriginalKeys(updatedKeys);
+      setUpdatedNewKeys(newKeyList);
       Locales.forEach((locale) => {
         updatedKeys.forEach((key, i) => {
-          if (originalKeys[i] === key) {
-            delete result[locale][originalKeys[i]];
-          }
           result[locale][key] = formData.get(
             `${locale}-new-value-${originalKeys[i]}`,
           ) as string;
         });
         newKeyList.forEach((key, i) => {
-          if (newKeys[i] === key) {
-            delete result[locale][newKeys[i]];
-          }
           result[locale][key] = formData.get(
             `${locale}-new-value-${newKeys[i]}`,
           ) as string;
@@ -52,7 +54,15 @@ export const Form = ({ children }: { children: ReactNode }) => {
       setData(result);
       open(true);
     },
-    [data, newKeys, open, originalKeys, selectedRows, setData],
+    [
+      newKeys,
+      open,
+      originalKeys,
+      selectedRows,
+      setData,
+      setUpdatedNewKeys,
+      setUpdatedOriginalKeys,
+    ],
   );
 
   return (

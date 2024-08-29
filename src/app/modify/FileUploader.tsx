@@ -4,7 +4,12 @@ import { CheckIcon } from '@/app/components/CheckIcon';
 import { SearchIcon } from '@/app/components/SearchIcon';
 import { TrashCanIcon } from '@/app/components/TrashCanIcon';
 import { useFileCtx } from '@/app/modify/FileContext';
-import { Locale, Locales } from '@/constants';
+import {
+  FILE_NAME_LOCALE_MAP,
+  Locale,
+  LOCALE_FILE_NAME_MAP,
+  Locales,
+} from '@/constants';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { useCallback, useRef } from 'react';
 
@@ -20,28 +25,6 @@ const ACCEPTED_FILE_NAME = [
   'zh_CN.json',
   'zh_TW.json',
 ];
-const FILE_NAME_LOCALE_MAP: Record<string, Locale> = {
-  'de_DE.json': Locale.DEU,
-  'en_US.json': Locale.Default,
-  'es_ES.json': Locale.ESP,
-  'fr_FR.json': Locale.FRA,
-  'it_IT.json': Locale.ITA,
-  'ja_JP.json': Locale.JPN,
-  'ko_KR.json': Locale.KOR,
-  'zh_CN.json': Locale.CHS,
-  'zh_TW.json': Locale.CHT,
-};
-const LOCALE_FILE_NAME_MAP: Record<Locale, string> = {
-  [Locale.DEU]: 'de_DE.json',
-  [Locale.Default]: 'en_US.json',
-  [Locale.ESP]: 'es_ES.json',
-  [Locale.FRA]: 'fr_FR.json',
-  [Locale.ITA]: 'it_IT.json',
-  [Locale.JPN]: 'ja_JP.json',
-  [Locale.KOR]: 'ko_KR.json',
-  [Locale.CHS]: 'zh_CN.json',
-  [Locale.CHT]: 'zh_TW.json',
-};
 
 export const FileUploader = () => {
   const { setFile, setOpenSelector } = useFileCtx();

@@ -21,6 +21,8 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [newKeys, setNewKeys] = useState<string[]>([]);
   const [newValues, setNewValues] = useState<Record<string, string>>({});
+  const [updatedOriginalKeys, setUpdatedOriginalKeys] = useState<string[]>([]);
+  const [updatedNewKeys, setUpdatedNewKeys] = useState<string[]>([]);
 
   const originalKeys = useMemo(
     () => selectedRows.map((i) => Object.keys(data[Locale.Default])[i]),
@@ -35,13 +37,26 @@ export const FileContext = ({ children }: { children: ReactNode }) => {
       selectedRows,
       newValues,
       openSelector,
+      updatedOriginalKeys,
+      updatedNewKeys,
       setFile,
       setNewKeys,
       setNewValues,
       setSelectedRows,
       setOpenSelector: (flag: boolean) => setOpenSelector(flag),
+      setUpdatedOriginalKeys,
+      setUpdatedNewKeys,
     }),
-    [data, originalKeys, newKeys, selectedRows, newValues, openSelector],
+    [
+      data,
+      originalKeys,
+      newKeys,
+      selectedRows,
+      newValues,
+      openSelector,
+      updatedOriginalKeys,
+      updatedNewKeys,
+    ],
   );
 
   useEffect(() => {
@@ -91,11 +106,15 @@ const Ctx = createContext<{
   newValues: Record<string, string>;
   selectedRows: number[];
   openSelector: boolean;
+  updatedOriginalKeys: string[];
+  updatedNewKeys: string[];
   setFile: (file: Record<string, File> | Record<string, Blob> | null) => void;
   setSelectedRows: (rows: number[]) => void;
   setOpenSelector: (flag: boolean) => void;
   setNewKeys: Dispatch<SetStateAction<string[]>>;
   setNewValues: Dispatch<SetStateAction<Record<string, string>>>;
+  setUpdatedOriginalKeys: Dispatch<SetStateAction<string[]>>;
+  setUpdatedNewKeys: Dispatch<SetStateAction<string[]>>;
 }>({
   data: {},
   originalKeys: [],
@@ -103,11 +122,15 @@ const Ctx = createContext<{
   newValues: {},
   selectedRows: [],
   openSelector: false,
+  updatedOriginalKeys: [],
+  updatedNewKeys: [],
   setFile: (_file: Record<string, File> | Record<string, Blob> | null) => {},
   setSelectedRows: (_rows: number[]) => {},
   setOpenSelector: (_flag: boolean) => {},
   setNewKeys: () => {},
   setNewValues: () => {},
+  setUpdatedOriginalKeys: () => {},
+  setUpdatedNewKeys: () => {},
 });
 
 export const useFileCtx = () => useContext(Ctx);

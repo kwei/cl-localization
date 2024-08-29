@@ -10,8 +10,8 @@ export default function Home() {
   return (
     <main className="flex w-full flex-1 justify-center px-6 pb-8">
       <div className="h-full w-full max-w-[1280px]">
-        <PreviewChangeContext>
-          <FileContext>
+        <FileContext>
+          <PreviewChangeContext>
             <FormHandler.Form>
               <h1 className="relative w-full pb-4 pt-8 text-center text-2xl font-bold text-black md:text-3xl">
                 Modify Existed JSON by Locale
@@ -49,8 +49,8 @@ export default function Home() {
               </div>
               <FormHandler.ActionBar />
             </FormHandler.Form>
-          </FileContext>
-        </PreviewChangeContext>
+          </PreviewChangeContext>
+        </FileContext>
       </div>
     </main>
   );
